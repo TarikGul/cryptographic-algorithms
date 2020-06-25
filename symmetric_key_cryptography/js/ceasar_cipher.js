@@ -31,17 +31,17 @@ const decodeCipher = (string) => {
     const possibleWords = [];
 
     for(let i = 0; i < alpha.length; i++) {
-        const encryptedString = [];
+        const decryptedString = [];
 
         for(let j = 0; j < str.length; j++) {
             const index = alpha.split('').indexOf(str[j]);
             // This cipher is used if the shifting is done to the right originally
             const newLetter = alpha[(index + i) % 26];
 
-            encryptedString.push(newLetter);
+            decryptedString.push(newLetter);
         };
 
-        possibleWords.push(encryptedString.join(''));
+        possibleWords.push(decryptedString.join(''));
     };
     return possibleWords
 };
