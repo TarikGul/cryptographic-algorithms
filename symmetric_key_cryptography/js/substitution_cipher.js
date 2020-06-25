@@ -7,9 +7,12 @@ const createObjectKey = () => {
     const alpha = 'abcdefghijklmnopqrstuvwxyz';
     const alphaArr = alpha.split('');
 
+    const keys = [];
+    const values = [];
+
+    // This will create the first 13 unique key value pairs
     while(alphaArr.length !== 0) {
         const rand1 = Math.floor(Math.random() * alphaArr.length);
-
         let rand2;
         let unique = false;
         // This is to make sure that variable rand1 and rand2 do not equal eachother
@@ -19,15 +22,37 @@ const createObjectKey = () => {
                 unique = true
             };
         };
-        const index1 = alphaArr.indexOf(rand1);
-        const letter1 = alphaArr.splice(index1, 1);
 
-        const index2 = alphaArr.indexOf(rand2);
-        const letter2 = alphaArr.splice(index2, 1);
+        const letter1 = alphaArr.splice(rand1, 1);
+        keys.push(letter1);
 
+        const letter2 = alphaArr.splice(rand2, 1);
+        values.push(letter2);
         key[letter1] = letter2;
     }
-    console.log(key);
+
+    while (values.length !== 1) {
+        const rand3 = Math.floor(Math.random() * values.length);
+
+        let rand;
+        let unique = false;
+
+        while(!unique) {
+            rand = Math.floor(Math.random() * values.length) 
+            if(rand !== rand3) {
+                unique = true;
+            }
+        }
+
+        const letterKey = values.splice(rand3, 1);
+
+        const letterValue = keys.splice(rand, 1);
+        key[letterKey] = letterValue;
+    }
+
+    key[values[0]] = key[keys[0]]
+
+    console.log(key)
     return key;
 }
 
