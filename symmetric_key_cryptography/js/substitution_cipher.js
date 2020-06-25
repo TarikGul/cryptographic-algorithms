@@ -22,13 +22,26 @@ const createObjectKey = () => {
                 unique = true
             };
         };
+        
+        const letter1 = alphaArr[rand1]
+        const letter2 = alphaArr[rand2]
 
-        const letter1 = alphaArr.splice(rand1, 1);
-        keys.push(letter1);
-
-        const letter2 = alphaArr.splice(rand2, 1);
-        values.push(letter2);
         key[letter1] = letter2;
+
+        if(alphaArr.indexOf(letter1) === alphaArr.length - 1) {
+            alphaArr.splice(-1, 1)
+        } else {
+            alphaArr.splice(rand1, 1);
+        }
+
+        if (alphaArr.indexOf(letter2) === alphaArr.length - 1) {
+            alphaArr.splice(-1, 1)
+        } else {
+            alphaArr.splice(rand2, 1);
+        }
+
+        keys.push(letter1);
+        values.push(letter2);
     }
 
     while (values.length !== 1) {
@@ -43,16 +56,16 @@ const createObjectKey = () => {
                 unique = true;
             }
         }
-
+        
         const letterKey = values.splice(rand3, 1);
 
         const letterValue = keys.splice(rand, 1);
-        key[letterKey] = letterValue;
+        
+        key[letterKey] = letterValue.join('');
     }
 
     key[values[0]] = key[keys[0]]
 
-    console.log(key)
     return key;
 }
 
