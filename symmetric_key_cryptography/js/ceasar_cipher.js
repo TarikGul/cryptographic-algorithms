@@ -19,7 +19,39 @@ const ceasarCipher = (string, n) => {
 
 // Test cases
 ceasarCipher('abc', 1) // => BCD
-ceasarCipher('CAESARMESSAGE', 3) // => FDGVDUPHVVDJH
+ceasarCipher('CEASARMESSAGE', 3) // => FHDVDUPHVVDJH
 ceasarCipher('asiknxh', 8) // => IAQSVFP
+
+
+// In this case we will take a string, and brute force all 26 shift possibilites
+// You can add a ton of other methods where you can parse real words from gibberish
+const decodeCipher = (string) => {
+    const alpha = "abcdefghijklmnopqrstuvwxyz";
+    const str = string.toLowerCase().split('');
+    const possibleWords = [];
+
+    for(let i = 0; i < alpha.length; i++) {
+        const encryptedString = [];
+
+        for(let j = 0; j < str.length; j++) {
+            const index = alpha.split('').indexOf(str[j]);
+            // This cipher is used if the shifting is done to the right originally
+            const newLetter = alpha[(index + i) % 26];
+
+            encryptedString.push(newLetter);
+        };
+
+        possibleWords.push(encryptedString.join(''));
+    };
+    return possibleWords
+};
+
+const decoded1 = decodeCipher('bcd'); 
+const decoded2 = decodeCipher('FHDVDUPHVVDJH'); 
+const decoded3 = decodeCipher('asiknxh');
+
+console.log(decoded1.includes('abc')); // => true
+console.log(decoded2.includes('ceasarmessage')); // => true
+console.log(decoded3.includes('asiknxh')); // => true
 
 
