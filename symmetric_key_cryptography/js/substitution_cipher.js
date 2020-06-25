@@ -7,10 +7,7 @@ const createObjectKey = () => {
     const alpha = 'abcdefghijklmnopqrstuvwxyz';
     const alphaArr = alpha.split('');
 
-    let numbers = {};
-    let i = 0;
-
-    while(alphaArr.length !== 0 || i !== 2) {
+    while(alphaArr.length !== 0) {
         const rand1 = Math.floor(Math.random() * alphaArr.length);
 
         let rand2;
@@ -22,21 +19,16 @@ const createObjectKey = () => {
                 unique = true
             };
         };
-        i++
         const index1 = alphaArr.indexOf(rand1);
-        const letter = alphaArr.splice(index, 1);
+        const letter1 = alphaArr.splice(index1, 1);
 
         const index2 = alphaArr.indexOf(rand2);
-        const letter2 = alphaArr.splice(index, 1);
+        const letter2 = alphaArr.splice(index2, 1);
 
-        
-        if(i === 8) {
-            break;
-        }
-        numbers[rand1] = rand2;
+        key[letter1] = letter2;
     }
-    console.log(numbers);
-    return numbers;
+    console.log(key);
+    return key;
 }
 
 createObjectKey();
