@@ -54,4 +54,7 @@ console.log(decoded1.includes('abc')); // => true
 console.log(decoded2.includes('ceasarmessage')); // => true
 console.log(decoded3.includes('asiknxh')); // => true
 
-
+// In order to break a shift cipher one of the most common ways is identifying 
+// the most commonly used letter in the encryption. In this case of english the most
+// commonly used letter is E. Which would mean in the message it is very possuble the most
+// common letter used can map to E. And os on and so forth. 
