@@ -28,17 +28,8 @@ const createObjectKey = () => {
 
         key[letter1] = letter2;
 
-        if(alphaArr.indexOf(letter1) === alphaArr.length - 1) {
-            alphaArr.splice(-1, 1)
-        } else {
-            alphaArr.splice(rand1, 1);
-        }
-
-        if (alphaArr.indexOf(letter2) === alphaArr.length - 1) {
-            alphaArr.splice(-1, 1)
-        } else {
-            alphaArr.splice(rand2, 1);
-        }
+        lastElement(letter1, alphaArr, rand1);
+        lastElement(letter2, alphaArr, rand2);
 
         keys.push(letter1);
         values.push(letter2);
@@ -65,8 +56,16 @@ const createObjectKey = () => {
     }
 
     key[values[0]] = key[keys[0]]
-
+    console.log(key)
     return key;
+}
+
+const lastElement = (letter, arr, rand) => {
+    if(arr.indexOf(letter) === arr.length - 1) {
+        arr.splice(-1, 1)
+    } else {
+        arr.splice(rand, 1)
+    }
 }
 
 createObjectKey();
