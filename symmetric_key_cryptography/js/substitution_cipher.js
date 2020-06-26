@@ -3,6 +3,8 @@
 
 // I wrote two seperate ways of writing this algorithm, check the ruby way for a 
 // more elegant way of achieving the same goal. 
+
+// This key also doesnt take into account punctuation, whitespace
 const createObjectKey = () => {
     const key = {};
 
@@ -37,6 +39,7 @@ const createObjectKey = () => {
         values.push(letter2);
     }
 
+    // This will create the next 13 key values
     while (values.length !== 1) {
         const rand3 = Math.floor(Math.random() * values.length);
 
