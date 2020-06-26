@@ -31,4 +31,8 @@ const vigeneresCipher = (str, key) => {
     return cipher.join('')
 }
 
+// Decrypting this is pretty easy so i dont need to do it, but you do the exact
+// same thing as above, and you would need the key in order to decrypt it. 
+// just minus the strIndex, by the keyIndex in order to reverse engineer it.
+
 vigeneresCipher('THISISATEST', 'VECTORVECTO');
