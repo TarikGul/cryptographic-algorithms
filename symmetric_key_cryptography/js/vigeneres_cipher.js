@@ -35,4 +35,4 @@ const vigeneresCipher = (str, key) => {
 // same thing as above, and you would need the key in order to decrypt it. 
 // just minus the strIndex, by the keyIndex in order to reverse engineer it.
 
-vigeneresCipher('THISISATEST', 'VECTORVECTO');
+vigeneresCipher('THISISATEST', 'VECTORVECTO') // => OLKLWJVXGLH
