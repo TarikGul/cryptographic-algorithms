@@ -1,6 +1,8 @@
 // In order to have a substition cipher work we need to know what each letter maps too
 // In this case we are going to memoize an Object that.
 
+// I wrote two seperate ways of writing this algorithm, check the ruby way for a 
+// more elegant way of achieving the same goal. 
 const createObjectKey = () => {
     const key = {};
 
