@@ -1,6 +1,11 @@
 // Just to clarify vigeneres ciphers key and str that is inputed need to 
 // share the same length for it to work.
 
+// If an attacker wanted to understand how to decode a vigeneres cipher,
+// they would use an plaintext attack. Which is basically sending your own plaintext through
+// the algorithm, and decoding it yourself before it is sent out.
+// Basically intercepting your own message
+
 const vigeneresCipher = (str, key) => {
     if(str.length !== key.length) {
         console.log('Key and string length need to be the same for this cipher');
