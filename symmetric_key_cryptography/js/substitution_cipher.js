@@ -73,4 +73,29 @@ const lastElement = (letter, arr, rand) => {
     }
 }
 
-createObjectKey();
+// In order to also break a substitution algorithm, building a frequency algorithm,
+// can help you find out what the actual key value pairs could be, and would allow 
+// a user to develop a legend of all possibilites;
+
+// Encrypt the string
+const substitutionCipher = (str, key) => {
+    const newStr = [];
+
+    for(let i = 0; i < str.length; i++) {
+        newStr.push(key[str[i]]);
+    };
+
+    const encryptedString = newStr.join('');
+
+    console.log(encryptedString);
+    return encryptedString;
+}
+
+const key1 = createObjectKey();
+substitutionCipher('abc', key1)
+
+const key2 = createObjectKey();
+substitutionCipher('message', key2);
+
+const key3 = createObjectKey();
+substitutionCipher('substitutemessage', key3);
