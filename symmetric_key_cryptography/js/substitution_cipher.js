@@ -23,8 +23,8 @@ const createObjectKey = () => {
         while(!unique) {
             rand2 = Math.floor(Math.random() * alphaArr.length);
             if (rand2 !== rand1) {
-                unique = true
-            };
+                unique = true;
+            }
         };
         
         const letter1 = alphaArr[rand1]
@@ -51,7 +51,7 @@ const createObjectKey = () => {
             if(rand !== rand3) {
                 unique = true;
             }
-        }
+        };
         
         const letterKey = values.splice(rand3, 1);
 
@@ -60,16 +60,16 @@ const createObjectKey = () => {
         key[letterKey] = letterValue.join('');
     }
 
-    key[values[0]] = key[keys[0]]
-    console.log(key)
+    key[values[0]] = key[keys[0]];
+    console.log(key);
     return key;
 }
 
 const lastElement = (letter, arr, rand) => {
     if(arr.indexOf(letter) === arr.length - 1) {
-        arr.splice(-1, 1)
+        arr.splice(-1, 1);
     } else {
-        arr.splice(rand, 1)
+        arr.splice(rand, 1);
     }
 }
 
