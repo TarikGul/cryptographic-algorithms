@@ -1,7 +1,11 @@
 // Before reading the playFairCipher code you should make sure you have a good
 // understanding of the helper functions involved with the cipher, they are 
 // pretty basic but important to understanding the 
-const playFairCipher = (keyword, message) => {
+function playFairCipher (keyword, message) {
+    const alpha = 'abcdefghiklmnopqrstuvwxyz';
+    const matrix = matrixCipher(keyword, alpha);
+    const pairedChars = splitMessage(message);
+
 
 }
 
@@ -10,7 +14,7 @@ function splitMessage(message) {
     const splitMessage = [];
 
     let i = 0;
-    while (i < joined.length ) {
+    while (i < joined.length) {
 
         // If both letters are the same the playfair cipher has you return
         // the first letter with an X following it.
@@ -36,7 +40,7 @@ function splitMessage(message) {
     return splitMessage;
 }
 
-// Test to make sure you are developing the right return value in you splitMessage
+// Test to make sure you are developing the right return value in your splitMessage
 // You want only pairs of 2, no undefineds, and not single letters on their own
 
 // const message = 'secret messages';
@@ -52,7 +56,10 @@ function splitMessage(message) {
 function matrixCipher(keyword, alpha) {
     const lettersObj = {};
     const letters = keyword.concat(alpha).toUpperCase().split('');
-    const matrix = [];
+
+    // this allows us to return multiple values;
+    this.matrix = [];
+    this.positions = {};
 
     alpha.split('').forEach((char) => {
         lettersObj[char] = false;
@@ -63,35 +70,41 @@ function matrixCipher(keyword, alpha) {
     for(let i = 0; i < 5; i++) {
         const matrixLayer = [];
 
-        for(let i = 0; i < 5; i++) {
+        for(let j = 0; j < 5; j++) {
             const cur = letters[x];
 
             // Check hash if the letter has been used
             if(lettersObj[cur] !== true) {
+                // Push the letter in the right position
                 matrixLayer.push(letters[x]);
                 lettersObj[cur] = true;
+
+                // Save the position of the letter in the matrix for O(1) lookup
+                // Instead of having to constantly loop through the matrix
+                this.positions[letters[x]] = [i, j];
             } else {
                 // If the letter has been used lower the count so we go to the 
                 // next letter without losing an iteration
-                i--
+                j--
             }
             x = x + 1;
         }
-        matrix.push(matrixLayer);
+        this.matrix.push(matrixLayer);
     };
-    return matrix;
+    return this;
 }
 
 // Run the following code below to check for yourself, but there should be
 // no repeats in the matrix, and the first letters should always start with 
 // the cipher key. Also J should not be in there.
 
-// const alpha = 'abcdefghiklmnopqrstuvwxyz';
-// const keyword = 'keyword';
+const alpha = 'abcdefghiklmnopqrstuvwxyz';
+const keyword = 'keyword';
 
-// const matrixResult = matrixCipher(keyword, alpha);
+const matrixResult = matrixCipher(keyword, alpha);
 
-// console.log(matrixResult)
+console.log(matrixResult.matrix)
+console.log(matrixResult.positions)
 //   [ ['k', 'e', 'y', 'w', 'o'],
 //     ['r', 'd', 'a', 'b', 'c'],
 //     ['f', 'g', 'h', 'i', 'l'],
