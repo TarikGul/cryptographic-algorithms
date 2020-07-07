@@ -5,8 +5,42 @@ function playFairCipher (keyword, message) {
     const alpha = 'abcdefghiklmnopqrstuvwxyz';
     const matrix = matrixCipher(keyword, alpha);
     const pairedChars = splitMessage(message);
+    const m = matrix.matrix;
+    const pos = matrix.positions
 
+    const encryptedMessage = [];
 
+    for (let i = 0; i < pairedChars.length; i++) {
+        const pair = pairedChars[i];
+        // Memoizing the position of the characters in order to stay DRY
+        const pos0 = pos[pair[0]];
+        const pos1 = pos[pair[1]]; 
+
+        let newPos0;
+        let newPos1;
+        
+        if (pos0[1] === pos1[1]) {
+            // This is if the letters are both in the same column
+            // Doing basic modular arithmatic to make sure that if the letters 
+            // are at the end of the matrix that theyll come back to the beginning
+            newPos0 = [(pos0[0] + 1) % m.length, pos0[1]];
+            newPos1 = [(pos1[0] + 1) % m.length, pos1[1]];
+        } else if (pos0[0] === pos1[0]) {
+            // Like the last conditional this checks if the letters are in the
+            // same row in the matrix
+            newPos0 = [pos0[0], (pos0[1] + 1) % m[0].length];
+            newPos1 = [pos1[0], (pos1[1] + 1) % m[0].length];
+        } else if (pos0[1] !== pos1[1]) {
+            // If the position of the two letters arent in the same row or column
+            // in the matrix all you have to do is swap the column numbers and you 
+            // have found the cipher letter that will be replacing the cur letter 
+            newPos0 = [pos0[0], pos1[1]];
+            newPos1 = [pos1[0], pos0[1]];
+        } 
+        const newPair = m[newPos0[0]][newPos0[1]].concat(m[newPos1[0]][newPos1[1]])
+        encryptedMessage.push(newPair)
+    }
+    return encryptedMessage.join('');
 }
 
 function splitMessage(message) {
@@ -98,16 +132,22 @@ function matrixCipher(keyword, alpha) {
 // no repeats in the matrix, and the first letters should always start with 
 // the cipher key. Also J should not be in there.
 
-const alpha = 'abcdefghiklmnopqrstuvwxyz';
-const keyword = 'keyword';
+// const alpha = 'abcdefghiklmnopqrstuvwxyz';
+// const keyword = 'keyword';
 
-const matrixResult = matrixCipher(keyword, alpha);
+// const matrixResult = matrixCipher(keyword, alpha);
 
-console.log(matrixResult.matrix)
-console.log(matrixResult.positions)
+// console.log(matrixResult.matrix)
+// console.log(matrixResult.positions)
 //   [ ['k', 'e', 'y', 'w', 'o'],
 //     ['r', 'd', 'a', 'b', 'c'],
 //     ['f', 'g', 'h', 'i', 'l'],
 //     ['m', 'n', 'p', 'q', 's'],
 //     ['t', 'u', 'v', 'x', 'z'] ]
 
+
+const message = 'secret message';
+const keyword = 'keyword';
+
+const cipher = playFairCipher(keyword, message);
+console.log(cipher);
