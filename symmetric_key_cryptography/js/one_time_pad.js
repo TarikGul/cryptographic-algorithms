@@ -8,6 +8,9 @@
 // completely random and serves zero patterns. But the caveat is that you can 
 // never lose the one time pad or else you cant decrypt the message.
 
+// Also a cool line of code to put to number together without having to concat
+// string is => (0b101 << 4 | 0b1010).toString(2).padStart(8, '0');
+
 // ASCII protocol
 const binaries = require('../../util/ASCII_protocol');
 
