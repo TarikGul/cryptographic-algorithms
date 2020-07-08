@@ -32,7 +32,7 @@ function generateEncryption(message) {
 
     // We just want to make sure that we join the encryption before returning
     // the value of this
-    this.encryption = this.encryption.join('')
+    this.encryption = this.encryption.join('');
 
     return this;
 }
