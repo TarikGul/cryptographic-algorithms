@@ -24,8 +24,6 @@ def create_object_key():
     print(key)
     return key
 
-key = create_object_key()
-
 def substitution_cipher(str, key):
     new_str = []
 
@@ -38,7 +36,14 @@ def substitution_cipher(str, key):
     encrypted_str
 
 
-substitution_cipher('hello', key)
+key1 = create_object_key()
+substitution_cipher('abc', key1)
+
+key2 = create_object_key()
+substitution_cipher('message', key2)
+
+key3 = create_object_key()
+substitution_cipher('substitutionmessage', key3)
 
             
 
