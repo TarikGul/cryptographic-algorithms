@@ -78,7 +78,7 @@ def generate_sub_keys(key):
     P = [hex2bin(i) for i in P]
     for i in range(4):
         for j in range(256):
-            s[i][j] = hex2bin(S[i][j])
+            S[i][j] = hex2bin(S[i][j])
 
     P = [_xor(keys[i], P[i]) for i in range(18)]
 
