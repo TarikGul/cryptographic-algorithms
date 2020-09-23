@@ -118,12 +118,23 @@ def encryption(msg, sub_keys, s_boxes, mode):
         cipher = bin2str(ciphertext)
     
     return cipher
-    
 
-if __name__ == "__main__":
-    string = 'hello000'
-    binary = str2bin(string, 64)
-    hex = bin2hex(binary)
-    new_binary = hex2bin(hex)
-    num = bin2int(new_binary)
-    print(num)
+parser = argparse.ArgumentParser()
+parser.add_argument('-m', '--mode', choices=['e', 'd'], required=True, help='Encryption(e) / Decryption(d)')
+parser.add_argument('-k', '--key', required=True, help='key for encryption or decryption')
+parser.add_argument('-s', '--string', required=True, help='String to be encrypted or decrypted')
+args = parser.parse_args()
+
+message = args.string
+password = args.key
+
+sub_keys, s_boxes = generate_sub_keys(password)
+
+if args.mode == 'e':
+    enc = encryption(message, sub_keys, s_boxes, 'e')
+    print('hex digest:', enc)
+elif args.mode == 'd':
+    dec = encryption(message, sub_keys[::-1], s_boxes, 'd')
+    print(dec)
+else:
+    print('Invalid choice!')
