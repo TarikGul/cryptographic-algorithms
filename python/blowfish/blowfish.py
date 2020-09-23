@@ -95,6 +95,31 @@ def generate_sub_keys(key):
     
     return P, S
 
+def encryption(msg, sub_keys, s_boxes, mode):
+    if mode == 'e':
+        msg = [msg[i:i + 8] for i in range(0, len(msg), 8)]
+
+        if len(msg[-1]) < 8:
+            msg[-1] += ' ' * (8 - len(msg[-1]))
+        
+        msg = [str2bin(i, None) for i in msg]
+    
+    elif mode == 'd':
+        msg = [hex2bin(msg[i:i + 16]) for i in range(0, len(msg), 16)]
+    
+    ciphertext = ''
+    for snippet in msg:
+        ciphertext += encrypt(snippet, sub_keys, s_boxes)
+    
+    if mode == 'e':
+        cipher = bin2hex(ciphertext)
+
+    if mode == 'd':
+        cipher = bin2str(ciphertext)
+    
+    return cipher
+    
+
 if __name__ == "__main__":
     string = 'hello000'
     binary = str2bin(string, 64)
