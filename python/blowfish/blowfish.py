@@ -34,6 +34,7 @@ def _add(a: str, b: str):
 def _round(block, key, s_boxes):
     # This is an important part of the fiestel cipher where we establish
     # the left and right value, and which one well be xoring
+    # before we flip the rolls and run through the fiestel network again
     assert len(block) == 64, 'Error in round input, len of block is not 64 bits'
     assert len(key) == 32, 'length of key is not 64 bits'
     L, R = block[:len(block) // 2], block[len(block) // 2]
@@ -70,10 +71,29 @@ def generate_sub_keys(key):
 
     msg = '00000000'
     msg = str2bin(msg, 64)
-    
+    with open('pihex64k.txt', 'r') as f:
+        P = [f.read(8) for i in range(18)]
+        S = [[f.read(8) for j in range(256)] for k in range(4)]
 
+    P = [hex2bin(i) for i in P]
+    for i in range(4):
+        for j in range(256):
+            s[i][j] = hex2bin(S[i][j])
 
+    P = [_xor(keys[i], P[i]) for i in range(18)]
+
+    for i in range(0, len(P), 2):
+        msg = encrypt(msg, P, S)
+        P[i] = msg[:32]
+        P[i + 1] = msg[32:]
     
+    for i in range(4):
+        for j in range(0, 256, 2):
+            msg = encrypt(msg, P, S)
+            S[i][j] = msg[:32]
+            S[i][j + 1] = msg[32:]
+    
+    return P, S
 
 if __name__ == "__main__":
     string = 'hello000'
