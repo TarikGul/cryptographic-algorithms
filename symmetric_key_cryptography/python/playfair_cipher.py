@@ -9,7 +9,7 @@ class Playfair:
         self._positions = {}
     
     def encrypt(self):
-        # Populate the matrix
+        # Populate the matrix.
         self._matrix_cipher(self._keyword, self.alpha)
         # Turn the secret message into pairs of characters. 
         # Read the _split_message function to see rules regarding play_fairs pairs
@@ -107,9 +107,10 @@ class Playfair:
 
             self._matrix.append(matrix_layer)
 
-message = 'secret message';
-key = 'keyword'
-alpha = 'abcdefghijklmnopqrstuvwxyz'
+if __name__ == "__main__":
+    message = 'secret message';
+    key = 'keyword'
+    alpha = 'abcdefghijklmnopqrstuvwxyz'
 
-encryption = Playfair(key, message)
-print(encryption.encrypt())
+    encryption = Playfair(key, message)
+    print(encryption.encrypt())
