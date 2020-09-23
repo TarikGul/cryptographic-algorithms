@@ -1,5 +1,9 @@
 import math
 import random
+# -------------------------------------------------------
+# TODO
+# Need to create a new binary file to read ASCII binaries,
+# file got lost in the new restructure.
 from binaries import binaries
 
 
