@@ -24,6 +24,7 @@ def hex2int(h):
     return int(h, 16)
 
 def _xor(a: str, b: str):
+    print(a, b)
     assert len(a) == 32 and len(b)== 32, 'lengths of the blocks does not match to 64 in XOR'
     return ''.join(str(int(i) ^ int(j)) for i, j in zip(a, b))
 
@@ -37,7 +38,7 @@ def _round(block, key, s_boxes):
     # before we flip the rolls and run through the fiestel network again
     assert len(block) == 64, 'Error in round input, len of block is not 64 bits'
     assert len(key) == 32, 'length of key is not 64 bits'
-    L, R = block[:len(block) // 2], block[len(block) // 2]
+    L, R = block[:len(block) // 2], block[len(block) // 2:]
     xored_L = _xor(L, key)
     R_prime = xored_L
 
