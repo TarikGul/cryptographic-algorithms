@@ -1,34 +1,32 @@
 import argparse
 
-def str2bin(str, length):
+def str2bin(str: str, length: int) -> str:
     if length == 64:
         assert len(str) == 8, 'length of the string is not 64 bits'
     elif length == 32:
-        assert len(str) == 4, 'length of the string is not 64 bits'
-    
+        assert len(str) == 4, 'length of the string is not 32 bits'
     return ''.join('{:08b}'.format(ord(char)) for char in str)
 
-def bin2hex(binary):
+def bin2hex(binary: str) -> str:
     return ''.join('{:x}'.format(int(binary[i:i + 4], 2)) for i in range(0, len(binary), 4))
     
-def hex2bin(hex):
+def hex2bin(hex: str) -> str:
     return ''.join('{:04b}'.format(int(i, 16)) for i in hex)
 
-def bin2int(binary):
+def bin2int(binary: str) -> str:
     return int(binary, 2)
 
-def bin2str(binary):
+def bin2str(binary: str) -> str:
     return ''.join(chr(int(binary[i:i + 8], 2)) for i in range(0, len(binary), 8))
 
-def hex2int(h):
+def hex2int(h: str) -> int:
     return int(h, 16)
 
-def _xor(a: str, b: str):
-    print(a, b)
+def _xor(a: str, b: str) -> str:
     assert len(a) == 32 and len(b)== 32, 'lengths of the blocks does not match to 64 in XOR'
     return ''.join(str(int(i) ^ int(j)) for i, j in zip(a, b))
 
-def _add(a: str, b: str):
+def _add(a: str, b: str) -> str:
     assert len(a) == 32 and len(b) == 32, 'lengths of blacks does not match to 32 in ADD'
     return '{:032b}'.format((bin2int(a) + bin2int(b)) % (2**32))
 
@@ -44,11 +42,12 @@ def _round(block, key, s_boxes):
 
     L_split = [bin2int(xored_L[i:i + 8]) for i in range(0, len(xored_L), 8)]
     assert len(L_split) == 4, 'The splitted L has no 4 elements'
+    print(L_split)
     s_values = [s_boxes[i][L_split[i]] for i in range(4)]
 
     assert len(s_values[0]) == 32, 's_values are not of 32 bits'
 
-    # add1(s3, xor1(s2, add(s1, s0)))
+    # The Following below -> add1(s3, xor1(s2, add(s1, s0)))
     result = _add(s_values[3], _xor(s_values[2], _add(s_values[1], s_values[0])))
 
     assert len(result) == 32, 'output of s_boxes operation is not 32 bits'
@@ -139,3 +138,10 @@ elif args.mode == 'd':
     print(dec)
 else:
     print('Invalid choice!')
+
+# if __name__ == "__main__":
+#     bin = str2bin('aassddff', 64)
+#     hex = bin2hex(bin)
+#     new_bin = hex2bin(hex)
+#     c = bin2int(new_bin)
+#     d = hex2int(hex)
