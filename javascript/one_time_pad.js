@@ -12,7 +12,7 @@
 // string is => (0b101 << 4 | 0b1010).toString(2).padStart(8, '0');
 
 // ASCII protocol
-const binaries = require('../util/ASCII_protocol');
+const binaries = require('./util/ASCII_protocol');
 
 // This will create or encryption, and return the onetimepad and the encryption,
 // as well as the original message
