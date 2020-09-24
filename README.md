@@ -1,12 +1,12 @@
 # Welcome To the Crypo Algos Repo
 
-So far what is complete: all of the symmetric key ciphers in Javascript
-are finished, some have their decoding algorithms written. 
+This is a place for me to jump between different Programming languages and write interpretations of different cryptographic algorithms. 
 
-Symmetric Key algorithms are almost done for ruby, i just need to finish two more 
-of them. 
+Recently added:
 
-I plan on tackling modern symmetric keys next, including writing custom fiestel 
-networks.
+Python - Blowfish(BCrypt)
 
-Feel free to contribute and add other languages :).
+Up Next:
+
+Javascript, Ruby - Blowfish
+Python - Elliptic Curve Cryptography.
