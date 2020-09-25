@@ -42,7 +42,6 @@ def _round(block, key, s_boxes):
 
     L_split = [bin2int(xored_L[i:i + 8]) for i in range(0, len(xored_L), 8)]
     assert len(L_split) == 4, 'The splitted L has no 4 elements'
-    print(L_split)
     s_values = [s_boxes[i][L_split[i]] for i in range(4)]
 
     assert len(s_values[0]) == 32, 's_values are not of 32 bits'
