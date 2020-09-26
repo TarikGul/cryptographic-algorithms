@@ -2,6 +2,7 @@
  * @TODO
  * -import argparser
  */
+const { ArgumentParser } = require('argparse');
 const assert = require('assert');
 const fs = require('fs');
 
@@ -215,25 +216,35 @@ const generateSubKeys = (key) => {
     return [P, S];
 }
 
+const encryption = (msg, subKeys, SBoxes, mode) => {
+    if(mode === 'e') {
+        
+    }
+}
+
+const parser = new ArgumentParser({})
+
+parser.add_argument('-m', '--mode', { choices: ['e', 'd'], required: true})
+parser.add_argument('-k', '--key', {required: true})
 /**
  * TEST CASES BELOW
  */
 
-let binary = stringToBinary('aassddff', 64);
-let hexcode = binaryToHex(binary);
-let backToBin = hexToBinary('d1310ba6');
-let binaryNumber = binaryToInt(binary);
-let string = binaryToString(binary);
-let int = hexcodeToInteger(hexcode);
-// console.log()
-let a = '10010011111001010011100011101000';
-let b = '11100000101101110000110111001110';
-let x = _xor(a, b)
-let add = _add(a, b)
-let block = '1010000011011110011111010111000000110110101001000000110010110101';
-let key = '00001010110000100011010100001101';
-let gen = generateSubKeys('password')
-console.log(gen)
+// let binary = stringToBinary('aassddff', 64);
+// let hexcode = binaryToHex(binary);
+// let backToBin = hexToBinary('d1310ba6');
+// let binaryNumber = binaryToInt(binary);
+// let string = binaryToString(binary);
+// let int = hexcodeToInteger(hexcode);
+// // console.log()
+// let a = '10010011111001010011100011101000';
+// let b = '11100000101101110000110111001110';
+// let x = _xor(a, b)
+// let add = _add(a, b)
+// let block = '1010000011011110011111010111000000110110101001000000110010110101';
+// let key = '00001010110000100011010100001101';
+// let gen = generateSubKeys('password')
+// console.log(gen)
 // console.log(backToBin, 'd1310ba6')
 
 
