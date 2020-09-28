@@ -1,7 +1,3 @@
-/**
- * @TODO
- * -import argparser
- */
 const { ArgumentParser } = require('argparse');
 const assert = require('assert');
 const fs = require('fs');
@@ -18,7 +14,7 @@ const stringToBinary = (string, length) => {
     for(let i = 0; i < string.length; i++) {
         unicodeChars.push(string.charCodeAt(i).toString(2).padStart(8, '0'));
     }
-    // console.log('unicode characters', unicodeChars, string)
+
     return unicodeChars.join('');
 }
 
@@ -122,7 +118,6 @@ const _round = (block, key, SBoxes) => {
 }
 
 const encrypt = (block, PArray, SBlocks) => {
-    console.log(PArray)
     for (let i = 0; i < PArray.length; i++) {
         blockTemp = _round(block, PArray[i], SBlocks);
         if(i === 2) console.log(blockTemp)
@@ -217,17 +212,68 @@ const generateSubKeys = (key) => {
 }
 
 const encryption = (msg, subKeys, SBoxes, mode) => {
+    const values = [];
+
     if(mode === 'e') {
-        
+        for(let i = 0; i < msg.length; i += 8) {
+            values.push(msg.slice(i, i + 8))
+        }
+
+        const len = values.length;
+
+        if(values[len].length < 8) {
+            values[len].padEnd(8, ' ');
+        }
+        msg = values;
+    } else if (mode === 'd') {
+        for(let i = 0; i < msg.length; i += 16) {
+            values.push(hexToBinary(msg.slice(i, i + 16)));
+        }
     }
+
+    let cipherText = '';
+    let cipher;
+
+    for (snippet in msg) {
+        cipherText += encrypt(snippet, subKeys, SBoxes);
+    }
+
+    if (mode === 'e') {
+        cipher = binaryToHex(cipherText);
+    }
+
+    if (mode === 'd') {
+        cipher = binaryToString(cipherText);
+    }
+
+    return cipherText
 }
 
 const parser = new ArgumentParser({})
 
-parser.add_argument('-m', '--mode', { choices: ['e', 'd'], required: true})
-parser.add_argument('-k', '--key', {required: true})
+parser.add_argument('-m', '--mode', { choices: ['e', 'd'], required: true, help: 'Encryption(e) / Decryption(d)'});
+parser.add_argument('-k', '--key', { required: true, help: 'key for encryption or decryption' });
+parser.add_argument('-s', '--string', { required: true, help: 'String to be encrypted or decrypted' });
+
+const args = parser.parse_args();
+
+const message = args.string;
+const password = args.key;
+
+const subKeys = generateSubKeys(password);
+
+if(args.mode === 'e') {
+    let enc = encryption(message, subKeys[0], subKeys[1], 'e');
+    console.log('hex digest:', enc);
+} else if(args.mode === 'd') {
+    let dec = encryption(message, subKeys[0].reverse(), subKeys[1], 'd');
+    console.log(dec);
+} else {
+    console.log('Invalid Choice');
+}
+
 /**
- * TEST CASES BELOW
+ * EASY TEST CASES BELOW
  */
 
 // let binary = stringToBinary('aassddff', 64);
