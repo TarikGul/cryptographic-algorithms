@@ -120,7 +120,6 @@ const _round = (block, key, SBoxes) => {
 const encrypt = (block, PArray, SBlocks) => {
     for (let i = 0; i < PArray.length; i++) {
         blockTemp = _round(block, PArray[i], SBlocks);
-        if(i === 2) console.log(blockTemp)
         block = blockTemp;
     };
 
@@ -215,26 +214,30 @@ const encryption = (msg, subKeys, SBoxes, mode) => {
     const values = [];
 
     if(mode === 'e') {
+
         for(let i = 0; i < msg.length; i += 8) {
             values.push(msg.slice(i, i + 8))
         }
 
-        const len = values.length;
+        const len = values.length - 1;
 
         if(values[len].length < 8) {
-            values[len].padEnd(8, ' ');
+            values[len] = values[len].padEnd(8, ' ');
         }
-        msg = values;
+        msg = values.map(ele => stringToBinary(ele));
+
     } else if (mode === 'd') {
+
         for(let i = 0; i < msg.length; i += 16) {
             values.push(hexToBinary(msg.slice(i, i + 16)));
         }
+
     }
 
     let cipherText = '';
     let cipher;
 
-    for (snippet in msg) {
+    for (snippet of msg) {
         cipherText += encrypt(snippet, subKeys, SBoxes);
     }
 
@@ -246,7 +249,7 @@ const encryption = (msg, subKeys, SBoxes, mode) => {
         cipher = binaryToString(cipherText);
     }
 
-    return cipherText
+    return cipher
 }
 
 const parser = new ArgumentParser({})
