@@ -118,20 +118,18 @@ const _round = (block, key, SBoxes) => {
 }
 
 const encrypt = (block, PArray, SBlocks) => {
-    for (let i = 0; i < PArray.length; i++) {
+    for (let i = 0; i < 16; i++) {
         blockTemp = _round(block, PArray[i], SBlocks);
         block = blockTemp;
     };
 
     let leftBlock = block.slice(0, 32);
     let rightBlock = block.slice(32);
-
     // Switch the values
     let temp = leftBlock;
     leftBlock = rightBlock;
     rightBlock = temp;
 
-    // return a new encrypted block
     return _xor(PArray[17], leftBlock) + _xor(PArray[16], rightBlock);
 }
 
@@ -169,7 +167,7 @@ const generateSubKeys = (key) => {
     while(x < 4) {
         let arr = [];
         let y = 0;
-        while(y < 256) {    
+        while(y < 256) {  
             arr.push(data.slice(j, j + 8));
             y += 1;
             j += 8;
@@ -187,7 +185,7 @@ const generateSubKeys = (key) => {
             S[i][j] = hexToBinary(S[i][j])
         };
     };
-
+    
     // xor the 32 bit blocks in P with the keys
     P = P.map((ele, i) => {
         return _xor(keys[i], ele)
@@ -236,10 +234,9 @@ const encryption = (msg, subKeys, SBoxes, mode) => {
 
     let cipherText = '';
     let cipher;
-
+    
     for (snippet of msg) {
         cipherText += encrypt(snippet, subKeys, SBoxes);
-        console.log(cipherText)
     }
 
     if (mode === 'e') {
