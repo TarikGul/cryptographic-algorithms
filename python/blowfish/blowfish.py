@@ -56,7 +56,7 @@ def _round(block, key, s_boxes):
 def encrypt(block, p_array, s_blocks):
     for key in p_array[:16]:
         block = _round(block, key, s_blocks)
-    
+
     left_block = block[:32]
     right_block = block[32:]
     right_block, left_block = left_block, right_block
@@ -75,6 +75,7 @@ def generate_sub_keys(key):
         S = [[f.read(8) for j in range(256)] for k in range(4)]
 
     P = [hex2bin(i) for i in P]
+    
     for i in range(4):
         for j in range(256):
             S[i][j] = hex2bin(S[i][j])
@@ -85,7 +86,7 @@ def generate_sub_keys(key):
         msg = encrypt(msg, P, S)
         P[i] = msg[:32]
         P[i + 1] = msg[32:]
-    
+
     for i in range(4):
         for j in range(0, 256, 2):
             msg = encrypt(msg, P, S)
@@ -102,11 +103,12 @@ def encryption(msg, sub_keys, s_boxes, mode):
             msg[-1] += ' ' * (8 - len(msg[-1]))
         
         msg = [str2bin(i, None) for i in msg]
-    
+
     elif mode == 'd':
         msg = [hex2bin(msg[i:i + 16]) for i in range(0, len(msg), 16)]
     
     ciphertext = ''
+
     for snippet in msg:
         ciphertext += encrypt(snippet, sub_keys, s_boxes)
     
