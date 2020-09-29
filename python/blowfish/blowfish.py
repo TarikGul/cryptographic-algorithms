@@ -120,29 +120,26 @@ def encryption(msg, sub_keys, s_boxes, mode):
     
     return cipher
 
-parser = argparse.ArgumentParser()
-parser.add_argument('-m', '--mode', choices=['e', 'd'], required=True, help='Encryption(e) / Decryption(d)')
-parser.add_argument('-k', '--key', required=True, help='key for encryption or decryption')
-parser.add_argument('-s', '--string', required=True, help='String to be encrypted or decrypted')
-args = parser.parse_args()
+def Main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-m', '--mode', choices=['e', 'd'], required=True, help='Encryption(e) / Decryption(d)')
+    parser.add_argument('-k', '--key', required=True, help='key for encryption or decryption')
+    parser.add_argument('-s', '--string', required=True, help='String to be encrypted or decrypted')
+    args = parser.parse_args()
 
-message = args.string
-password = args.key
+    message = args.string
+    password = args.key
 
-sub_keys, s_boxes = generate_sub_keys(password)
+    sub_keys, s_boxes = generate_sub_keys(password)
 
-if args.mode == 'e':
-    enc = encryption(message, sub_keys, s_boxes, 'e')
-    print('hex digest:', enc)
-elif args.mode == 'd':
-    dec = encryption(message, sub_keys[::-1], s_boxes, 'd')
-    print(dec)
-else:
-    print('Invalid choice!')
+    if args.mode == 'e':
+        enc = encryption(message, sub_keys, s_boxes, 'e')
+        print('hex digest:', enc)
+    elif args.mode == 'd':
+        dec = encryption(message, sub_keys[::-1], s_boxes, 'd')
+        print(dec)
+    else:
+        print('Invalid choice!')
 
-# if __name__ == "__main__":
-#     bin = str2bin('aassddff', 64)
-#     hex = bin2hex(bin)
-#     new_bin = hex2bin(hex)
-#     c = bin2int(new_bin)
-#     d = hex2int(hex)
+if __name__ == "__main__":
+    Main()
