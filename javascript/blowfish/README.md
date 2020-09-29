@@ -5,6 +5,10 @@
 [Java interpretation](https://www.geeksforgeeks.org/blowfish-algorithm-with-examples/)<br/>
 [Bruce Schneier Blog](https://www.schneier.com/)
 
+Todos
+----
+Add fiestel network visual,
+explain the process we use with the 64 bit blocks
 
 #### Encrypt
 ```
