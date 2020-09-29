@@ -231,7 +231,7 @@ const encryption = (msg, subKeys, SBoxes, mode) => {
         for(let i = 0; i < msg.length; i += 16) {
             values.push(hexToBinary(msg.slice(i, i + 16)));
         }
-
+        msg = values;
     }
 
     let cipherText = '';
@@ -239,6 +239,7 @@ const encryption = (msg, subKeys, SBoxes, mode) => {
 
     for (snippet of msg) {
         cipherText += encrypt(snippet, subKeys, SBoxes);
+        console.log(cipherText)
     }
 
     if (mode === 'e') {
