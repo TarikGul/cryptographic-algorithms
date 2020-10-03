@@ -5,8 +5,12 @@ This is a place for me to jump between different Programming languages and write
 Recently added:
 
 Python - Blowfish(BCrypt)
+Javascript - Blowfish(BCrypt)
 
 Up Next:
 
-Javascript, Ruby - Blowfish
+Ruby - Blowfish
+
+I should add a salt generator as well for Blowfish
+
 Python - Elliptic Curve Cryptography.
