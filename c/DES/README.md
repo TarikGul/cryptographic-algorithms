@@ -1,5 +1,9 @@
 # DES in C
 
-TODO
+To compile code:
 
-Update instructions on compiling and running the algorithm
+`gcc DES.c -o DES`
+
+To Run:
+
+`./DES`
