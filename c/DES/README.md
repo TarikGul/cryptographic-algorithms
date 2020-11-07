@@ -7,3 +7,7 @@ To compile code:
 To Run:
 
 `./DES`
+
+TODO:
+
+Add arg parser
