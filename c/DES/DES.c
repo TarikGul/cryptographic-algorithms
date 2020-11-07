@@ -410,3 +410,48 @@ register unsigned long *block, *keys;
     *block   = leftt;
     return;
 }
+
+/* Validation sets:
+* 
+* Single-length key, single-length plaintext -
+* Key      : 0123 4567 89ab cdef
+* Plain    : 0123 4567 89ab cde7
+* Cipher   : c957 4425 6a5e d31d
+**********************************************/
+
+void des_key(des_ctx *dc, unsigned char *key) {
+    deskey(key, EN0);
+    cpkey(dc->ek);
+    deskey(key, DE1);
+    cpkey(dc->dk);
+}
+
+/* Encrypt several blocks in ECB mode. Caller is responsible for
+   short blocks */
+void des_enc(des_ctx *dc, unsigned char *data, int blocks) {
+    unsigned long work[2];
+    int i;
+    unsigned char *cp;
+
+    cp = data;
+    for ( i = 0; i< blocks; i++ ) {
+        scrunch(cp, work);
+        desfunc(work, dc->ek);
+        unscrun(work, cp);
+        cp += 8;
+    }
+}
+
+void des_dec(des_ctx *dc, unsigned char *data, int blocks) {
+    unsigned long work[2];
+    int i;
+    unsigned char *cp;
+
+    cp = data;
+    for (i = 0; i < blocks; i++) {
+        scrunch(cp, work);
+        desfunc(work, dc->dk);
+        unscrun(work, cp);
+        cp += 8;
+    }
+}
