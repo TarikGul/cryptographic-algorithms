@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #define EN0 0  /* MODE == encrypt */
 #define DE1 1  /* MODE == decrypt */
 
@@ -6,14 +8,14 @@ typedef struct {
     unsigned long dk[32];
 } des_ctx;
 
-extern void deskey(unsigned char *, short);
+extern void deskey(unsigned char *, int);
 /*                  Hheykey[8]  MODE
 * Sets the internal key register according to the hexadecimal
 * key contained in the 8 bytes of hexkey, according to the DES,
 * for encryption or decryption according to the MODE
 */
 
-extern void useKey(unsigned long *);
+extern void usekey(unsigned long *);
 /*                  cookedkey[32]
 * Loads the internal key register with the data in cookedkey
 */
@@ -74,7 +76,7 @@ static unsigned char pc2[48] = {
 
 void deskey(key, edf)
 unsigned char *key;
-short edf;
+int edf;
 {
     register int i, j, l, m, n;
     unsigned char pc1m[56], pcr[56];
@@ -158,7 +160,7 @@ unsigned char *inblock, *outblock;
 
     scrunch(inblock, work);
     desfunc(work, KnL);
-    unscrunc(work, outblock);
+    unscrun(work, outblock);
     return;
 }
 
@@ -456,12 +458,12 @@ void des_dec(des_ctx *dc, unsigned char *data, int blocks) {
     }
 }
 
-void main(void) {
+int main(void) {
     des_ctx dc;
     int i;
-    unsigned long data[0];
-    char *cp,key[8] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef};
-    char x[8]       = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xe7};
+    unsigned int data[0];
+    unsigned char *cp,key[8] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef};
+    unsigned char x[8]       = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xe7};
 
     cp = x;
 
@@ -469,15 +471,15 @@ void main(void) {
     des_enc(&dc,cp,1);
     printf("Enc(0..7, 0..7) = ");
     for(i = 0; i < 8; i++) printf("%02x ", ((unsigned int)cp[i]) & 0x00ff);
-    print("\n");
+    printf("\n");
 
     des_dec(&dc, cp, 1);
 
     printf("Dec(above,0..7) = ");
     for(i = 0; i < 8; i++) printf("%02x ", ((unsigned int) cp[i]) & 0x00ff);
-    print("\n");
+    printf("\n");
 
-    cp = (char *) data;
+    cp = (unsigned char *) data;
     for(i = 0; i < 10; i += 2) data[i] = i;
 
     des_enc(&dc, cp, 5); /* Enc 5 blocks */
