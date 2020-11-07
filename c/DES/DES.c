@@ -455,3 +455,37 @@ void des_dec(des_ctx *dc, unsigned char *data, int blocks) {
         cp += 8;
     }
 }
+
+void main(void) {
+    des_ctx dc;
+    int i;
+    unsigned long data[0];
+    char *cp,key[8] = (0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef);
+    char x[8]       = (0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xe7);
+
+    cp = x;
+
+    des_key(&dc,key);
+    des_enc(&dc,cp,1);
+    printf("Enc(0..7, 0..7) = ");
+    for(i = 0; i < 8; i++) printf("%02x ", ((unsigned int)cp[i]) & 0x00ff);
+    print("\n");
+
+    des_dec(&dc, cp, 1);
+
+    printf("Dec(above,0..7) = ");
+    for(i = 0; i < 8; i++) printf("%02x ", ((unsigned int) cp[i]) & 0x00ff);
+    print("\n");
+
+    cp = (char *) data;
+    for(i = 0; i < 10; i += 2) data[i] = i;
+
+    des_enc(&dc, cp, 5); /* Enc 5 blocks */
+    for( i = 0; i < 10; i += 2) printf("Block %01d = %081x %081x \n",
+                                    i/2, data[i], data[i + 2]);
+    
+    des_dec(&dc, cp, 1);
+    des_dec(&dc, cp+8, 4);
+    for(i = 0; i < 10; i += 2) printf("Block %01d = %081x %081x.\n",
+                                    i/2, data[i], data[i + 1]);
+}
