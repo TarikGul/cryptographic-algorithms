@@ -48,5 +48,64 @@ static unsigned short bytebit[8] = {
     0200, 0100, 040, 020, 010, 04, 02, 01 };
 
 static unsigned long bigbyte[24] = {
-    
+    0x800000L, 0x400000L, 0x200000L, 0x100000L,
+    0x80000L,  0x40000L,  0x20000L,  0x10000L,
+    0x8000L,   0x4000L,   0x2000L,   0x1000L,
+    0x800L,    0x400L,    0x200L,    0x100L,
+    0x80L,     0x40L,     0x20L,     0x10L,
+    0x8L,      0x4L,      0x2L,      0x1L     };
+
+/* Use the key schedule specified in the Standard (ANSI X3.92-1981) */
+
+static unsigned char pc1[56] = {
+    56, 48, 40, 32, 24, 16,  8,  0, 57, 49, 41, 33, 25, 17,
+     9,  1, 58, 50, 42, 34, 26, 18, 10,  2, 59, 51, 43, 35,
+    62, 54, 46, 38, 30, 22, 14,  6, 61, 53, 45, 37, 29, 21,
+    13,  5, 60, 52, 44, 36, 28, 20, 12,  4, 27, 19, 11,  3  }; 
+
+static unsigned char totrot[16] = {
+    1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28 };
+
+static unsigned char pc2[48] = {
+    13, 16, 10, 23,  0,  4,  2, 27, 14,  5, 20,  9,
+    22, 18, 11,  3, 25,  7, 15,  6, 26, 19, 12,  1,
+    40, 51, 30, 36, 46, 54, 29, 39, 50, 44, 32, 47,
+    43, 48, 38, 55, 33, 52, 45, 41, 49, 35, 28, 31  };
+
+void deskey(key, edf)
+unsigned char *key;
+short edf;
+{
+    register int i, j, l, m, n;
+    unsigned char pc1m[56], pcr[56];
+    unsigned long kn[32];
+
+    for ( j = 0; j < 56; j++ ) {
+        l = pc1[j];
+        m = l & 07;
+        pc1m[j] = (key[1 >> 3] & bytebit[m]) ? 1 : 0;
+    }
+
+    for( i = 0; i < 16; i++ ) {
+        if( edf == DE1 ) m = (15 - i) << 1;
+        else m = i << 1;
+        n = m + 1;
+        kn[m] = kn[n] = 0L;
+        for ( j = 0; j < 28; j++ ) {
+            l = j + totrot[i];
+            if( l < 28 ) pcr[j] = pc1m[l];
+            else pcr[j] = pc1m[l - 28];
+        }
+        for( j = 0; j < 56; j++ ) {
+            l = j + totrot[i];
+            if( l < 56 ) pcr[j] = pc1m[l];
+            else pcr[j] = pc1m[l - 28];
+        }
+        for( j = 0; j < 24; j++ ) {
+            if( pcr[pc2[j]] ) kn[m] |= bigbyte[j];
+            if( pcr[pc2[j+24]] ) kn[n] |= bigbyte[j];
+        }
+    }
+    cookey(kn);
+    return;
 }
