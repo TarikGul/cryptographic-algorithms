@@ -88,4 +88,28 @@ void setloki(loki_ctx *c, char *key)
     #endif
 }
 
+void enloki(loki_ctx *c, char *b)
+{
+    register        i;
+    register Long   L, R;       /* left and right data halves */
+
+    #ifdef LITTLE_ENDIAN
+        bswap(b);               /* swap bytes round if little-endian */
+    #endif
+
+    L = ((Long *)b)[0];
+    R = ((Long *)b)[1];
+
+    for (i = 0; i < ROUNDS; i+=2) {     /* Encrypt with the 16 subkeys */
+        L ^= f (R, c->loki_subkeys[i]);
+        R ^= f (L, c->loki_subkeys[i+1]);
+    }
+
+    ((Long *)b)[0] = R;         /* Y = swap(LR) */
+    ((Long *)b)[1] = L;
+
+    #ifdef LITTLE_ENDIAN
+        bswap(b);               /* swap bytes round if little-endian   */
+    #endif
+}
 
