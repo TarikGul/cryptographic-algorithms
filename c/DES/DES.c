@@ -109,3 +109,26 @@ short edf;
     cookey(kn);
     return;
 }
+
+static void cookey(raw1)
+register unsigned long *raw1;
+{
+    register unsigned long *cook, *raw0;
+    unsigned long dough[32];
+    register int i;
+
+    cook = dough;
+    for( i = 0; i < 16; i++, raw1++ ) {
+        raw0 = raw1++;
+        *cook    = (*raw0 & 0x00fc0000L) << 6;
+        *cook   |= (*raw0 & 0x00000fc0L) << 10;
+        *cook   |= (*raw1 & 0x00fc0000L) >> 10;
+        *cook++ |= (*raw1 & 0x00000fc0L) >> 6;
+        *cook    = (*raw0 & 0x0003f000L) << 12;
+        *cook   |= (*raw0 & 0x0000003fL) >> 4;
+        *cook++ |= (*raw1 & 0x0000003fL);
+    }
+    usekey(dough);
+    return;
+}
+
