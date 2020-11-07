@@ -132,3 +132,22 @@ register unsigned long *raw1;
     return;
 }
 
+void cpkey(into)
+register unsigned long *into;
+{
+    register unsigned long *from, *endp;
+
+    from = KnL, endp = &KnL[32];
+    while( from < endp ) *into++ = *from++;
+    return;
+}
+
+void usekey(from)
+register unsigned long *from;
+{
+    register unsigned long *to, *endp;
+    to = KnL, endp = &KnL[32];
+    while( to < endp ) *to++ = *from++;
+    return;
+}
+
