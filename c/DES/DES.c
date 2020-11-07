@@ -151,3 +151,44 @@ register unsigned long *from;
     return;
 }
 
+void des(inblock, outblock)
+unsigned char *inblock, *outblock;
+{
+    unsigned long work[2];
+
+    scrunch(inblock, work);
+    desfunc(work, KnL);
+    unscrunc(work, outblock);
+    return;
+}
+
+static void scrunch(outof, into)
+register unsigned char *outof;
+register unsigned long *into;
+{
+    *into    = (*outof++ & 0xffL) << 24;
+    *into   |= (*outof++ & 0xffL) << 16;
+    *into   |= (*outof++ & 0xffl) << 8;
+    *into++ |= (*outof++ & 0xffL);
+    *into    = (*outof++ & 0xffL) << 24;
+    *into   |= (*outof++ & 0xffL) << 16;
+    *into   |= (*outof++ & 0xffL) << 8;
+    *into   |= (*outof & 0xffL);
+    return;
+}
+
+static void unscrun(outof, into)
+register unsigned long *outof;
+register unsigned char *into;
+{
+    *into++ = (*outof++ >> 24) & 0xffL;
+    *into++ = (*outof++ >> 16) & 0xffL;
+    *into++ = (*outof++ >>  8) & 0xffL;
+    *into++ =  *outof++        & 0xffL; 
+    *into++ = (*outof++ >> 24) & 0xffL;
+    *into++ = (*outof++ >> 16) & 0xffL;
+    *into++ = (*outof++ >>  8) & 0xffL;
+    *into   =  *outof          & 0xffL;
+    return;
+}
+
