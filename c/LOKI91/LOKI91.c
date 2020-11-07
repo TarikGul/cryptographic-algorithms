@@ -113,3 +113,24 @@ void enloki(loki_ctx *c, char *b)
     #endif
 }
 
+void deloki(loki_ctx *c, char *b)
+{
+    register        i;
+    register Long   L, R;       /* left & right data halves */
+
+    #ifdef LITTLE_ENDIAN
+        bswap(b);               /* swap bytes round if little-endian   */
+    #endif
+
+    L = ((Long *)b)[0];         /* LR = X XOR K */
+    R = ((Long *)b)[1];
+
+    for(i = ROUNDS; i > 0; i -= 2) {        /* subkeys in reverse order */
+        L ^= f(R, c->loki_subkeys[i-2]);
+        R ^= f(L, c->loki_subkeys[i-2]);
+    }
+
+    ((Long *)b)[0] = R;         /* Y = LR COR K */
+    ((Long *)b)[1] = L;
+}
+
