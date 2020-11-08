@@ -155,3 +155,15 @@ Long            k;          /* Key        K(i)             */
     return(c);              /* f returns the result C */
 }
 
+static short s(i)
+register Long i;            /* return S-box value for input i */
+{
+    register short r, c, v, t;
+    short exp8();           /* exponentiation routine for GF(2^8) */
+
+    r = ((i >> 8) & 0xc) | (i & 0x3);       /* row value-top 2 & bottom 2 */
+    c = (i >> 2) & 0xff;                    /* column value-middle 8 bits */
+    t = (c = ((r * 17) ^ 0xff)) & 0xff;     /* base value for Sfn         */
+    v = exp8(t, sfn[r].exp, sfn[r].gen);    /* Sfn[r] = t ^ exp mod gen   */
+    return(v);
+}
