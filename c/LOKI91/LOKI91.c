@@ -134,3 +134,24 @@ void deloki(loki_ctx *c, char *b)
     ((Long *)b)[1] = L;
 }
 
+#define MASK12      0x0fff      /* 12 bit mask for expansion E */
+
+static Long f(r, k)
+register Long   r;          /* Data value R(i-1)           */
+Long            k;          /* Key        K(i)             */
+{
+    Long a, b, c;           /* 32 bit mask for expansion E */
+
+    a = r ^ k;              /* A = R(i-1) XOR K(i)         */
+
+    /* want to use slow speed.small size version */
+    b = ((Long)s(( a        & MASK12)))       | /* B = S(E(R(i-1))^K(i)) */
+        ((Long)s(((a >>  8) & MASK12)) <<  8) |
+        ((Long)s(((a >> 16) & MASK12)) << 16) |
+        ((Long)s((((a >> 24) | (a << 8)) & MASK12)) << 24);
+
+    perm32(&c, &b, P);      /* C = P(S( E(R(i-1)) XOR k(i))) */
+
+    return(c);              /* f returns the result C */
+}
+
