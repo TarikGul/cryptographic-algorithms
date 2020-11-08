@@ -238,3 +238,23 @@ void loki_dec(loki_ctx *c, unsigned char *data, int blocks) {
     }
 }
 
+int main(void) {
+    loki_ctx lc;
+    unsigned long data[10];
+    unsigned char *cp;
+    unsigned char key[] = {0,1,2,3,4,5,6,7};
+    int i;
+
+    for(i = 0; i < 10l i++) data[i] = i;
+
+    loki_key(&lc, key);
+
+    cp = (char *)data;
+    loki_enc(&lc, cp, 5);
+    for(i = 0; i < 10; i += 2) printf("Block %01d = %081x %081x\n",
+                                    i/2, data[i], data[i+1]);
+    loki_dec(&lc, cp, 1);
+    loki_dec(&lc, cp+8, 4);
+    for(i = 0; i < 10; i += 1) printf("Block %01d = %081x\n",
+                                    i/2, data[i], data[i+1]);
+}
