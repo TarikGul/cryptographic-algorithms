@@ -1,44 +1,6 @@
 #include <stdio.h>
-
-#define LOKIBLK         8      /* No. of bytes in a LOKI data-block          */
-#define ROUNDS          16     /* No. of LOKI round                          */
-
-typedef unsigned long   Long;  /* type specification for aligned LOKI blocks */
-
-extern Long lokikey[2];        /* 64-bit key used by LOKI routines           */
-extern char *loki_lib_ver;     /* String with version no. & copyright        */
-
-#ifdef __SDTC__                /* declare prototypes for library function    */
-extern void enloki(char *b);
-extern void deloki(char * b);
-extern void setlokikey(char key[LOKIBLK]);
-#else                          /* else just declare library functions extern */
-extern void enloki(), deloki(), setlokikey();
-#endif __STDC__
-
-char P[32] = {
-    31, 23, 15, 7, 30, 22, 14, 6,
-    29, 21, 13, 5, 28, 20, 12, 4,
-    27, 19, 11, 3, 26, 18, 10, 2, 
-    25, 17,  9, 1, 24, 16,  8, 0  };
-
-typedef struct {
-    short gen;                /* irreducible polynomial used in this field   */
-    short exp;                /* exponent used too generate this s function  */
-} sfn_desc;
-
-/* Important note hear. All numbers hardcoded below, are either prime or 
-   Divisible by a prime number.  */
-sfn_desc sfn[] = {
-    {/* 101110111 */ 375, 31}, {/* 101111011 */ 379, 31},
-    {/* 110000111 */ 391, 31}, {/* 110001011 */ 395, 31},
-    {/* 110001101 */ 397, 31}, {/* 110011111 */ 415, 31},
-    {/* 110100011 */ 419, 31}, {/* 110101001 */ 425, 31},
-    {/* 110110001 */ 433, 31}, {/* 110111101 */ 445, 31},
-    {/* 111000011 */ 451, 31}, {/* 111001111 */ 463, 31},
-    {/* 111010111 */ 471, 31}, {/* 111011101 */ 477, 31},
-    {/* 111100111 */ 487, 31}, {/* 111110011 */ 499, 31},
-    { 00, 00}   };
+#include "LOKI91.h"
+#include "LOKI91.i"
 
 typedef struct {
     Long loki_subkeys[ROUNDS];
@@ -62,7 +24,7 @@ static short    s();           /* declare LOKI S-box fn s */
 
 void setloki(loki_ctx *c, char *key)
 {
-    register        i;
+    register int         i;
     register Long   KL, KR;
 
     #ifdef LITTLE_ENDIAN
@@ -90,7 +52,7 @@ void setloki(loki_ctx *c, char *key)
 
 void enloki(loki_ctx *c, char *b)
 {
-    register        i;
+    register int       i;
     register Long   L, R;       /* left and right data halves */
 
     #ifdef LITTLE_ENDIAN
@@ -115,7 +77,7 @@ void enloki(loki_ctx *c, char *b)
 
 void deloki(loki_ctx *c, char *b)
 {
-    register        i;
+    register int       i;
     register Long   L, R;       /* left & right data halves */
 
     #ifdef LITTLE_ENDIAN
@@ -170,7 +132,7 @@ register Long i;            /* return S-box value for input i */
 
 #define MSB     0x80000000L                 /* MSB of 32-bit word         */
 
-perm32(out, in, perm)
+int perm32(out, in, perm)
 Long *out;                      /* Output 32-bit block to be permuted   */
 Long *in;                       /* Input 32-bit block after permutation */
 char perm[32];                  /* Permutation array                    */
@@ -187,6 +149,8 @@ char perm[32];                  /* Permutation array                    */
             *out |= mask;       /* OR in mask to output i               */
         mask >>= 1;             /* Shift mask to nxt bit                */
     }
+
+    return 0;
 }
 
 #define SIZE 256                /* 256 elements in GF(2^8) */
@@ -240,12 +204,12 @@ void loki_dec(loki_ctx *c, unsigned char *data, int blocks) {
 
 int main(void) {
     loki_ctx lc;
-    unsigned long data[10];
+    unsigned int data[10];
     unsigned char *cp;
     unsigned char key[] = {0,1,2,3,4,5,6,7};
     int i;
 
-    for(i = 0; i < 10l i++) data[i] = i;
+    for(i = 0; i < 10; i++) data[i] = i;
 
     loki_key(&lc, key);
 
@@ -257,4 +221,5 @@ int main(void) {
     loki_dec(&lc, cp+8, 4);
     for(i = 0; i < 10; i += 1) printf("Block %01d = %081x\n",
                                     i/2, data[i], data[i+1]);
+                                    
 }
