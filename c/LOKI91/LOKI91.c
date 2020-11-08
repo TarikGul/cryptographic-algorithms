@@ -211,3 +211,30 @@ short gen;                      /* irredecible polynomail generating Galios Fiel
 
     return(result);
 }
+
+void loki_key(loki_ctx *c, unsigned char *key) {
+    setlokikey(c, key);
+}
+
+void loki_enc(loki_ctx *c, unsigned char *data, int blocks) {
+    unsigned char *cp;
+    int i;
+
+    cp = data;
+    for(i = 0; i < blocks; i++) {
+        enloki(c, cp);
+        cp += 8;
+    }
+}
+
+void loki_dec(loki_ctx *c, unsigned char *data, int blocks) {
+    unsigned char *cp;
+    int i;
+
+    cp = data;
+    for(i = 0; i < blocks; i++) {
+        deloki(c, cp);
+        cp += 8;
+    }
+}
+
