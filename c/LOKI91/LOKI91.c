@@ -167,3 +167,47 @@ register Long i;            /* return S-box value for input i */
     v = exp8(t, sfn[r].exp, sfn[r].gen);    /* Sfn[r] = t ^ exp mod gen   */
     return(v);
 }
+
+#define MSB     0x80000000L                 /* MSB of 32-bit word         */
+
+perm32(out, in, perm)
+Long *out;                      /* Output 32-bit block to be permuted   */
+Long *in;                       /* Input 32-bit block after permutation */
+char perm[32];                  /* Permutation array                    */
+{
+    Long mask = MSB;            /* mask used to set bit in output       */
+    register int i, o, b;       /* input bit no, output bit no, value   */
+    register char *p = perm;    /* ptr to permutation array             */
+
+    *out = 0;                   /* clear output block                   */
+    for(o = 0; o < 32; o++) {   /* For each output bit position o       */
+        i = (int)*p++;          /* get input bit permuted to output o   */
+        b = (*in >> i) & 01;    /* value of input bit i                 */
+        if (b)                  /* If the input bit i is set            */
+            *out |= mask;       /* OR in mask to output i               */
+        mask >>= 1;             /* Shift mask to nxt bit                */
+    }
+}
+
+#define SIZE 256                /* 256 elements in GF(2^8) */
+
+short exp8(base, exponent, gen)
+short base;                     /* base of exponentiation  */
+short exponent;                 /* exponent                */
+short gen;                      /* irredecible polynomail generating Galios Field */
+{
+    short accum  = base;        /* superincreasing sequence of base */
+    short result = 1;           /* result of exponentiation         */
+
+    if (base == 0)              /* if zero base spsecified then     */
+        return(0);              /* The result is "0" if base = 0    */
+    
+    while (exponent != 0) {     /* repeat while exponent non-zero   */
+        if((exponent & 0x0001) == 0x0001)      /* multiply if exp 1 */
+            result = mult8(result, accum, gen);
+        exponent >>= 1;         /* shift exponent to next digit     */
+        accum = mult8(accum, accum, gen);           /* & square     */
+    }
+
+    return(result);
+}
