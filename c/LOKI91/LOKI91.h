@@ -8,7 +8,7 @@ typedef unsigned long Long; /* type specification for aligned LOKI blocks */
 extern Long lokikey[2];    /* 64-bit key used by LOKI routines           */
 extern char *loki_lib_ver; /* String with version no. & copyright        */
 extern int perm32();
-extern int mult8();
+extern short mult8();
 
 #ifdef __SDTC__ /* declare prototypes for library function    */
 extern void enloki(char *b);
