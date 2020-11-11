@@ -50,7 +50,7 @@ void setloki(loki_ctx *c, char *key)
     #endif
 }
 
-void enloki(loki_ctx *c, char *b)
+void enloki(loki_ctx *c, unsigned char *b)
 {
     register int       i;
     register Long   L, R;       /* left and right data halves */
@@ -75,7 +75,7 @@ void enloki(loki_ctx *c, char *b)
     #endif
 }
 
-void deloki(loki_ctx *c, char *b)
+void deloki(loki_ctx *c, unsigned char *b)
 {
     register int       i;
     register Long   L, R;       /* left & right data halves */
@@ -153,7 +153,24 @@ char perm[32];                  /* Permutation array                    */
     return 0;
 }
 
-#define SIZE 256                /* 256 elements in GF(2^8) */
+#define SIZE 256                /* 256 elements in GF(2^8)          */
+
+short mult8(a, b, gen)  
+short a, b;                     /* Operands for multiply            */
+short gen;                      /* irreducible polynomial generating Galios Field */
+{
+    short product = 0;          /* Result of multiplication         */
+
+    while(b != 0) {             /* While multiplier is non-zero     */
+        if(b & 01)              
+            product ^= a;       /* add multiplicand is LSB of b set */
+        a <<= 1;                /* shift multiplicand one place     */
+        if(a >= SIZE)           
+            a ^= gen;           /* add modulo reduce if needed      */
+        b >>= 1;                /* shift multiplier one place       */
+    }
+    return product; 
+}
 
 short exp8(base, exponent, gen)
 short base;                     /* base of exponentiation  */
@@ -213,13 +230,13 @@ int main(void) {
 
     loki_key(&lc, key);
 
-    cp = (char *)data;
+    cp = (unsigned char *)data;
     loki_enc(&lc, cp, 5);
     for(i = 0; i < 10; i += 2) printf("Block %01d = %081x %081x\n",
                                     i/2, data[i], data[i+1]);
     loki_dec(&lc, cp, 1);
     loki_dec(&lc, cp+8, 4);
-    for(i = 0; i < 10; i += 1) printf("Block %01d = %081x\n",
+    for(i = 0; i < 10; i += 1) printf("Block %01d = %081x %081x\n",
                                     i/2, data[i], data[i+1]);
                                     
 }
