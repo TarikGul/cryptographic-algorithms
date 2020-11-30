@@ -4,13 +4,13 @@ This is a place for me to jump between different Programming languages and write
 
 Recently added:
 
-Python - Blowfish(BCrypt)
-Javascript - Blowfish(BCrypt)
+C - LOKI91
+C - DES
 
 Up Next:
 
 Ruby - Blowfish
 
-I should add a salt generator as well for Blowfish
+I should add a salt generator as well for all the Blowfish interpretations
 
 Python - Elliptic Curve Cryptography.
