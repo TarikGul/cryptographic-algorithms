@@ -11,7 +11,7 @@ C - DES
 
 Up Next:
 
-Javascript ChaCha20
+Javascript ChaCha20 - In Progress
 
 Ruby - Blowfish
 
