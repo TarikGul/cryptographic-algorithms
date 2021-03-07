@@ -13,7 +13,7 @@ Up Next:
 
 Javascript ChaCha20 - In Progress
 
-Ruby - Blowfish
+Ruby -- Blowfish
 
 I should add a salt generator as well for all the Blowfish interpretations
 
